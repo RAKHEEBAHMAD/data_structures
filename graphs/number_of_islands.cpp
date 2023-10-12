@@ -1,44 +1,54 @@
-//User function Template for C++
-
-//User function Template for C++
-
 class Solution {
-  public:
-    void dfs(int node,vector<vector<int>>adjlist,vector<bool>& visited)
+  private:
+    void bfs(int row,int col,vector<vector<int>>& vis,vector<vector<char>> grid)
     {
-        visited[node]=true;
+        int n = grid.size();
+        int m = grid[0].size();
+        vis[row][col] = 1;
+        queue<pair<int,int>>q;
+        q.push({row,col});
         
-        for(auto x:adjlist[node])
+        while(!q.empty())
         {
-            if(!visited[x])
+            int row = q.front().first;
+            int col = q.front().second;
+            q.pop();
+            
+            for(int drow=-1;drow<=1;drow++)
             {
-                dfs(x,adjlist,visited);
+            for(int dcol=-1;dcol<=1;dcol++)
+            {
+                int nrow = row+drow;
+                int ncol = col+dcol;
+                if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && !vis[nrow][ncol] && grid[nrow][ncol]=='1')
+                {
+                    vis[nrow][ncol] = 1;
+                    q.push({nrow,ncol});
+                }
+            }
             }
         }
     }
-    int numProvinces(vector<vector<int>> adj, int V) {
-        vector<bool>visited(V,false);
-        vector<vector<int>>adjlist(V);
-        for(int i=0;i<V;i++)
+  public:
+    // Function to find the number of islands.
+    int numIslands(vector<vector<char>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<int>> vis(n,vector<int>(m,0));
+        
+        int cnt =0;
+        
+        for(int i=0;i<n;i++)
         {
-            for(int j=0;j<V;j++)
+            for(int j=0;j<m;j++)
             {
-                if(adj[i][j]==1 and i!=j)
+                if(!vis[i][j] and grid[i][j]=='1')
                 {
-                    adjlist[i].push_back(j);
+                    cnt++;
+                    bfs(i,j,vis,grid);
                 }
             }
         }
-        int count=0;
-        for(int i=0;i<V;i++)
-        {
-            if(!visited[i])
-            {
-                count++;
-                dfs(i,adjlist,visited);
-            }
-        }
-        
-        return count;
+        return cnt;
     }
 };

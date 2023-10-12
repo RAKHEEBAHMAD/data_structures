@@ -1,3 +1,4 @@
+/*-----------------------------BFS-------------------------------*/
 class Solution {
 public:
     void bfs(int row,int col,vector<vector<int>>& vis,vector<vector<int>>& image,int newcolor)
@@ -49,6 +50,41 @@ public:
         int m = image[0].size();
         vector<vector<int>>vis(n,vector<int>(m,0));
         bfs(sr,sc,vis,image,newColor);
+        return image;
+    }
+};
+
+/*-----------------------------DFS-------------------------------*/
+
+class Solution {
+public:
+    void dfs(int row,int col,vector<vector<int>>& vis,vector<vector<int>>& image,int newc,int intial)
+    {
+        int delrow[]={-1,0,1,0};
+        int delcol[]={0,1,0,-1};
+        int n=image.size();
+        int m=image[row].size();
+        
+        for(int i=0;i<4;i++)
+        {
+            int nrow=row+delrow[i];
+            int ncol=col+delcol[i];
+            
+            if(nrow>=0 and nrow<n and ncol<m and ncol>=0 and !vis[nrow][ncol] and image[nrow][ncol]==intial)
+            {
+                image[nrow][ncol]=newc;
+                vis[nrow][ncol]=1;
+                dfs(nrow,ncol,vis,image,newc,intial);
+            }
+        }
+    }
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        int n = image.size();
+        int m = image[0].size();
+        vector<vector<int>>vis(n,vector<int>(m,0));
+        int intial=image[sr][sc];
+        image[sr][sc]=newColor;
+        dfs(sr,sc,vis,image,newColor,intial);
         return image;
     }
 };
